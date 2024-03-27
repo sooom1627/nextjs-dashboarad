@@ -1,5 +1,5 @@
 const Invoices = () => {
-  return <p>Invoices Page</p>;
+  return <p>Invoic Page</p>;
 };
 
 export default Invoices;
