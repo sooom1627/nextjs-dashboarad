@@ -6,18 +6,18 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation';
 
 const FormSchema = z.object({
-  id:z.string(),
-  customerId:z.string(),
-  amount:z.number(),
-  status:z.enum(["pending", "paid"]),
-  date:z.string()
-})
+  id: z.string(),
+  customerId: z.string(),
+  amount: z.coerce.number(),
+  status: z.enum(['pending', 'paid']),
+  date: z.string(),
+});
 
-const CreateInvoice = FormSchema.omit({id:true, date:true})
+const CreateInvoice = FormSchema.omit({ id: true, date: true });
 
 export async function createInvoice(formData:FormData) {
-  const {customerId, amount, status} = CreateInvoice.parse({
-    customerId:formData.get('cutomerId'),
+  const { customerId, amount, status } = CreateInvoice.parse({
+    customerId:formData.get('customerId'),
     amount:formData.get('amount'),
     status:formData.get('status')
   })
@@ -26,7 +26,7 @@ export async function createInvoice(formData:FormData) {
   const date = new Date().toISOString().split('T')[0]
 
   await sql`
-    INSERT INTO invoices (cutomer_id, amount, status, date)
+    INSERT INTO invoices (customer_id, amount, status, date)
     VALUES (${customerId}, ${amountInCente}, ${status}, ${date})
   `;
 
