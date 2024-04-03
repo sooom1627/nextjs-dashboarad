@@ -1,12 +1,24 @@
 'use server'
 
+import {z} from 'zod'
+
+const FormSchema = z.object({
+  id:z.string(),
+  customerId:z.string(),
+  amount:z.number(),
+  status:z.enum(["pending", "paid"]),
+  date:z.string()
+})
+
+const CreateInvoice = FormSchema.omit({id:true, date:true})
+
 export async function createInvoice(formData:FormData) {
-  const rawFormData = {
+  const {customerId, amount, status} = CreateInvoice.parse({
     customerId:formData.get('cutomerId'),
     amount:formData.get('amount'),
     status:formData.get('status')
-  }
+  })
 
-  console.log(rawFormData)
-  
+  const amountInCente = amount*100
+  const date = new Date().toISOString().split('T')[0]
 }
